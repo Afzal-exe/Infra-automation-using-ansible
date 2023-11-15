@@ -1,0 +1,60 @@
+---
+- hosts: localhost  # Run this playbook on the Ansible control node.
+  connection: local
+  gather_facts: False  # No need to gather facts.
+
+  vars:
+    aws_access_key: AKIAZMSQBQRU7UZUMYGH
+    aws_secret_key: 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
+    vpc_name: 'webapp-vpc'
+
+  tasks:
+    - name: Delete EC2 VPC and Associated Resources
+      block:
+        # First, delete the network ACL
+        - name: Delete Network ACL
+          ec2_vpc_nacl:
+            aws_access_key: "{{ aws_access_key }}"
+            aws_secret_key: "{{ aws_secret_key }}"
+            name: "{{ vpc_name }} ACL"
+            state: absent
+
+        # Delete the security group
+        - name: Delete Security Group
+          ec2_group:
+            aws_access_key: "{{ aws_access_key }}"
+            aws_secret_key: "{{ aws_secret_key }}"
+            name: "{{ vpc_name }} Security Group"
+            state: absent
+
+        # Delete the subnet
+        - name: Delete Subnet
+          ec2_vpc_subnet:
+            aws_access_key: "{{ aws_access_key }}"
+            aws_secret_key: "{{ aws_secret_key }}"
+            name: "{{ vpc_name }} Subnet"
+            vpc_id: vpc-0cc443ab20986f773
+            cidr: 10.0.1.0/24
+            state: absent
+
+        # Delete the Internet Gateway
+        - name: Delete Internet Gateway
+          ec2_vpc_igw:
+            aws_access_key: "{{ aws_access_key }}"
+            aws_secret_key: "{{ aws_secret_key }}"
+            name: "{{ vpc_name }} IGW"
+            vpc_id : vpc-0cc443ab20986f773
+            cidr: 10.0.0.0/16
+            state: absent
+
+        # Delete the VPC
+        - name: Delete VPC
+          ec2_vpc_net:
+            aws_access_key: "{{ aws_access_key }}"
+            aws_secret_key: "{{ aws_secret_key }}"
+            name: "{{ vpc_name }} VPC"
+            vpc_id: vpc-0cc443ab20986f773
+            cidr: 10.0.0.0/16
+            state: absent
+      delegate_to: localhost
+

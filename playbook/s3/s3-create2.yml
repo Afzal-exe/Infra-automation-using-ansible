@@ -1,0 +1,17 @@
+---
+- name: Create an S3 Bucket
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Ensure S3 bucket exists
+      s3_bucket:
+        name: 'ansible-playbooks-v1'
+        region: ap-south-1
+        state: present
+        policy: "{{ lookup('file','policy.json') }}"  
+      register: bucket_result
+
+    - name: Show bucket creation result
+      debug:
+        var: bucket_result
+

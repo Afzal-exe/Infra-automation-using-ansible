@@ -1,0 +1,17 @@
+vars:
+  aws_access_key: 'AKIAZMSQBQRU7UZUMYGH'
+  aws_secret_key: '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'
+  vpc_title: 'test_webapp-vpc'
+  vpc_name: "{{ vpc_title }} VPC"
+  igw_name: "{{ vpc_title }} IGW"    
+  subnet_name: "{{ vpc_title }} Subnet"
+  acl_name: "{{ vpc_title }} ACL"
+  security_group_name: "{{ vpc_title }} Security Group"
+  route_table_name: "{{ vpc_title }} route table"
+  vpcCidrBlock: '10.0.0.0/16'
+  subNetCidrBlock: '10.0.1.0/24'
+  port22CidrBlock: '0.0.0.0/0'
+  destinationCidrBlock: '0.0.0.0/0'
+  state: 'present'
+  zone: 'ap-south-1b'
+  region: 'ap-south-1'

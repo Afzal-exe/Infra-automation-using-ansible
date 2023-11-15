@@ -1,0 +1,13 @@
+---
+
+- hosts: localhost
+  tasks:
+  - name: create S3 bucket
+    s3_bucket:
+      name: playbooks 
+      state: present
+      region: ap-south-1
+      versioning: no
+      tags:
+         name: meribuckit123456
+         type: example
