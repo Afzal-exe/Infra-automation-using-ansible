@@ -1,0 +1,37 @@
+---
+- name: Create EC2 Instance
+  hosts: localhost
+  gather_facts: false
+  become: true
+
+  vars:
+    region: "ap-south-1"
+    instance_type: "t2.micro"
+    ami_id: "ami-02a2af70a66af6dfb"
+    security_group_id: "sg-0326dfcb2ada8c69d"
+    subnet_id: "subnet-0cac0eb67dea91ae7"
+    user_data_script: |
+      #!/bin/bash
+      sudo -i
+      yum install apache2 -y
+      systemctl enable apache2
+      systemctl start apache2 
+
+
+  tasks:
+    - name: Launch EC2 Instance
+      amazon.aws.ec2_instance:
+        name: "ExampleInstance"
+        image_id: "{{ ami_id }}"
+        instance_type: "{{ instance_type }}"
+        region: "{{ region }}"
+        key_name: null  # Specify null to launch without a key pair
+        security_group: "{{ security_group_id }}"
+        subnet_id: "{{ subnet_id }}"
+        user_data: "{{ user_data_script }}"
+        wait: true
+        count: 1
+    - name: Display Public IP of the created instance
+      debug:
+        var: ec2.instances[0].public_ip
+
