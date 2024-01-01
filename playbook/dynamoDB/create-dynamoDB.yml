@@ -1,0 +1,14 @@
+---
+- name: Create DynamoDB
+  hosts: localhost
+  gather_facts: false
+  become: true
+  tasks:  
+    - name: Create dynamoDB
+      dynamodb_table:
+        name: "testforpro"
+        hash_key_name: "id"
+        hash_key_type: "STRING"
+        read_capacity: 1
+        write_capacity: 1
+
